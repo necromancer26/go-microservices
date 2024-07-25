@@ -11,7 +11,7 @@ import (
 )
 
 type UserRepository interface {
-	FindAll() (map[string]string, error)
+	FindAll() ([]*models.User, error)
 	FindByID(id int) (*models.User, error)
 	FindByName(name string) (*models.User, error)
 	FindByEmail(email string) (*models.User, error)

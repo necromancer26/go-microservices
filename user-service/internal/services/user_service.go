@@ -8,12 +8,13 @@ import (
 )
 
 type UserService struct {
-	userRepository *repository.RedisUserRepository
+	userRepository repository.UserRepository
 }
 
 func NewUserService() *UserService {
+	redisRepo := repository.NewRedisUserRepository()
 	return &UserService{
-		userRepository: repository.NewRedisUserRepository(),
+		userRepository: redisRepo,
 	}
 }
 func (s *UserService) CreateUser(user *models.User) error {
