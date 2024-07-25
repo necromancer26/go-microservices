@@ -17,7 +17,7 @@ func AuthenticationMiddleware(next http.Handler) http.Handler {
 
 		// Example of a simple token validation
 		parts := strings.Split(authHeader, "Bearer ")
-		if len(parts) != 2 || parts[1] != "your-secret-token" {
+		if len(parts) != 2 || parts[1] != "the-token-to-implement-when-i-have-time" {
 			utils.JSONResponse(w, http.StatusUnauthorized, map[string]string{"error": "Invalid or missing token"})
 			return
 		}

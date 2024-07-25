@@ -13,6 +13,7 @@ import (
 type UserRepository interface {
 	FindAll() (map[string]string, error)
 	FindByID(id int) (*models.User, error)
+	FindByName(name string) (*models.User, error)
 	FindByEmail(email string) (*models.User, error)
 	Save(user *models.User) error
 	Update(user *models.User) error
@@ -64,6 +65,11 @@ func (r *RedisUserRepository) FindByEmail(email string) (*models.User, error) {
 }
 
 func (r *RedisUserRepository) Save(user *models.User) error {
+	userID, err := r.client.Incr(ctx, "next_user_id").Result()
+	if err != nil {
+		return err
+	}
+	user.ID = int(userID)
 	data, err := json.Marshal(user)
 	if err != nil {
 		return err
@@ -73,31 +79,79 @@ func (r *RedisUserRepository) Save(user *models.User) error {
 }
 
 func (r *RedisUserRepository) Update(user *models.User) error {
+	ctx := context.Background()
+	key := fmt.Sprintf("user:%d", user.ID)
+
+	// Check if the user exists
+	exists, err := r.client.Exists(ctx, key).Result()
+	if err != nil {
+		return err
+	}
+	if exists == 0 {
+		return fmt.Errorf("user with ID %d does not exist", user.ID)
+	}
+
+	// Marshal the updated user to JSON
 	data, err := json.Marshal(user)
 	if err != nil {
 		return err
 	}
 
-	return r.client.Set(context.Background(), fmt.Sprintf("user:%d", user.ID), data, 0).Err()
+	// Save the updated user to Redis
+	return r.client.Set(ctx, key, data, 0).Err()
 }
 
 func (r *RedisUserRepository) Delete(id int) error {
 	return r.client.Del(context.Background(), fmt.Sprintf("user:%d", id)).Err()
 }
-func (r *RedisUserRepository) FindAll() (map[string]string, error) {
-	keys, err := r.client.Keys(ctx, "*").Result()
+func (r *RedisUserRepository) FindAll() ([]*models.User, error) {
+	ctx := context.Background()
+	keys, err := r.client.Keys(ctx, "user:*").Result()
 	if err != nil {
 		return nil, err
 	}
 
-	values := make(map[string]string)
+	var users []*models.User
 	for _, key := range keys {
-		val, err := r.client.Get(ctx, key).Result()
+		data, err := r.client.Get(ctx, key).Result()
 		if err != nil {
 			return nil, err
 		}
-		values[key] = val
+
+		var user models.User
+		err = json.Unmarshal([]byte(data), &user)
+		if err != nil {
+			return nil, err
+		}
+
+		users = append(users, &user)
 	}
 
-	return values, nil
+	return users, nil
+}
+func (r *RedisUserRepository) FindByName(name string) (*models.User, error) {
+	ctx := context.Background()
+	keys, err := r.client.Keys(ctx, "user:*").Result()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, key := range keys {
+		data, err := r.client.Get(ctx, key).Result()
+		if err != nil {
+			return nil, err
+		}
+
+		var user models.User
+		err = json.Unmarshal([]byte(data), &user)
+		if err != nil {
+			return nil, err
+		}
+
+		if user.Name == name {
+			return &user, nil
+		}
+	}
+
+	return nil, nil
 }
