@@ -13,7 +13,7 @@ type RedisDB struct {
 
 var ctx = context.Background()
 
-func NewClient() *redis.Client {
+func NewRedisClient() *redis.Client {
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379", // use your Redis server address and port
 		Password: "",               // no password set
