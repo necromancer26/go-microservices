@@ -1,16 +1,16 @@
-module github.com/necromancer26/go-microservices/api-gateway
+module github.com/necromancer26/go-microservices/user-service
 
 go 1.22.3
 
 require (
-	github.com/gorilla/mux v1.8.1
-	github.com/joho/godotenv v1.5.1
-)
-
-require (
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
+	github.com/cespare/xxhash/v2 v2.1.2 // indirect
+	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
+	github.com/go-redis/redis v6.15.9+incompatible
+	github.com/go-redis/redis/v8 v8.11.5 // indirect
+	github.com/gorilla/mux v1.8.1 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
+	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.2 // indirect
