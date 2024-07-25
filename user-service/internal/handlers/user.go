@@ -10,14 +10,15 @@ import (
 	"github.com/necromancer26/go-microservices/user-service/internal/services"
 )
 
-type AuthyPayload struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-}
-type UserPayload struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-}
+//	type AuthyPayload struct {
+//		Username string `json:"username"`
+//		Password string `json:"password"`
+//	}
+//
+//	type UserPayload struct {
+//		Username string `json:"username"`
+//		Password string `json:"password"`
+//	}
 type UserHandler struct {
 	userService *services.UserService
 }
