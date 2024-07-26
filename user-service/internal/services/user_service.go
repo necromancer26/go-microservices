@@ -17,6 +17,7 @@ func NewUserService() *UserService {
 		userRepository: redisRepo,
 	}
 }
+
 func (s *UserService) CreateUser(user *models.User) error {
 	err := s.userRepository.Save(user)
 	if err != nil {
@@ -25,6 +26,7 @@ func (s *UserService) CreateUser(user *models.User) error {
 	}
 	return nil
 }
+
 func (s *UserService) GetAllUsers() ([]*models.User, error) {
 	values, err := s.userRepository.FindAll()
 	if err != nil {
@@ -34,8 +36,14 @@ func (s *UserService) GetAllUsers() ([]*models.User, error) {
 	}
 	return values, nil
 }
+
 func (s *UserService) GetUserByName(name string) (*models.User, error) {
-	return s.userRepository.FindByName(name)
+	values, err := s.userRepository.FindByName(name)
+	if err != nil {
+		log.Fatalf("Could not connect to Redis: %v", err)
+		return nil, err
+	}
+	return values, nil
 }
 func (s *UserService) DeleteUserById(id int) error {
 	err := s.userRepository.Delete(id)
@@ -45,6 +53,12 @@ func (s *UserService) DeleteUserById(id int) error {
 	}
 	return nil
 }
+
 func (s *UserService) UpdateUser(user *models.User) error {
-	return s.userRepository.Update(user)
+	err := s.userRepository.Update(user)
+	if err != nil {
+		log.Fatalf("Could not delete by id: %v", err)
+		return err
+	}
+	return nil
 }
