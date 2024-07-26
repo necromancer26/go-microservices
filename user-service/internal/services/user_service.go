@@ -21,6 +21,7 @@ func (s *UserService) CreateUser(user *models.User) error {
 	err := s.userRepository.Save(user)
 	if err != nil {
 		log.Fatalf("Could not connect to Redis: %v", err)
+		return err
 	}
 	return nil
 }
@@ -28,6 +29,7 @@ func (s *UserService) GetAllUsers() ([]*models.User, error) {
 	values, err := s.userRepository.FindAll()
 	if err != nil {
 		log.Fatalf("Could not connect to Redis: %v", err)
+		return nil, err
 
 	}
 	return values, err

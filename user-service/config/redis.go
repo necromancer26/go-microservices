@@ -30,20 +30,20 @@ func NewRedisClient() *redis.Client {
 }
 
 // GetAllKeysAndValues retrieves all keys and their values from Redis
-func GetAllKeysAndValues(rdb *redis.Client) (map[string]string, error) {
-	keys, err := rdb.Keys(ctx, "*").Result()
-	if err != nil {
-		return nil, err
-	}
+// func GetAllKeysAndValues(rdb *redis.Client) (map[string]string, error) {
+// 	keys, err := rdb.Keys(ctx, "*").Result()
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	values := make(map[string]string)
-	for _, key := range keys {
-		val, err := rdb.Get(ctx, key).Result()
-		if err != nil {
-			return nil, err
-		}
-		values[key] = val
-	}
+// 	values := make(map[string]string)
+// 	for _, key := range keys {
+// 		val, err := rdb.Get(ctx, key).Result()
+// 		if err != nil {
+// 			return nil, err
+// 		}
+// 		values[key] = val
+// 	}
 
-	return values, nil
-}
+// 	return values, nil
+// }

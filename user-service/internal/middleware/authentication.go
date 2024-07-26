@@ -7,6 +7,7 @@ import (
 	"github.com/necromancer26/go-microservices/user-service/internal/utils"
 )
 
+// todo
 func AuthenticationMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		authHeader := r.Header.Get("Authorization")
