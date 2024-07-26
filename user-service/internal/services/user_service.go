@@ -32,7 +32,7 @@ func (s *UserService) GetAllUsers() ([]*models.User, error) {
 		return nil, err
 
 	}
-	return values, err
+	return values, nil
 }
 func (s *UserService) GetUserByName(name string) (*models.User, error) {
 	return s.userRepository.FindByName(name)
